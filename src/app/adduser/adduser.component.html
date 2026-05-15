@@ -1,0 +1,63 @@
+<body>
+    <div class="form-container">
+        <form [formGroup]="form" (ngSubmit)="openPopup()">
+            <label>Name:</label>
+            <input formControlName="name" placeholder="Enter name" type="text">
+            <div class="error" *ngIf="form.get('name')?.invalid && form.get('name')?.touched">Name is Required</div>
+            <label>Date Of Birth:</label>
+            <input type="date" formControlName="dob">
+            <div class="error" *ngIf="form.get('dob')?.invalid && form.get('dob')?.touched">Date is Required</div>
+            <label>City:</label>
+            <input formControlName="city" placeholder="Enter city" type="text">
+            <div class="error" *ngIf="form.get('city')?.invalid && form.get('city')?.touched">City is Required</div>
+            <label>Distance (km):</label>
+            <input type="number" formControlName="distance" placeholder="Enter distance">
+            <div class="error" *ngIf="form.get('distance')?.invalid && form.get('distance')?.touched">Distance is Required</div>
+            <label>Gender:</label>
+            <div class="radio-group">
+                <label>
+                    <input type="radio" formControlName="gender" value="Male">
+                    <span>Male</span>
+                </label>
+                <label>
+                    <input type="radio" formControlName="gender" value="Female">
+                    <span>Female</span>
+                </label>
+            </div>
+            <div class="error" *ngIf="form.get('gender')?.invalid && form.get('gender')?.touched">Gender is Required</div>
+            <label>Working Status:</label>
+            <div class="radio-group">
+                <label>
+                    <input type="radio" formControlName="working" [value]="true">
+                    <span>Yes</span>
+                </label>
+                <label>
+                    <input type="radio" formControlName="working" [value]="false">
+                    <span>No</span>
+                </label>
+            </div>
+            <div class="error" *ngIf="form.get('working')?.invalid && form.get('working')?.touched">Status is Required</div>
+            <button (click)="cancel()">Cancel</button>
+            <button type="submit" [disabled]="form.invalid">Submit</button>
+        </form>
+    </div>
+    <div *ngIf="showPopup" class="popup-overlay">
+  <div class="popup-card">
+
+    <h3>
+      {{ s.currentStudent ? 'Edit User?' : 'Add User?' }}
+    </h3>
+
+    <p><b>Name:</b> {{ form.value.name }}</p>
+    <p><b>DOB:</b> {{ form.value.dob }}</p>
+    <p><b>City:</b> {{ form.value.city }}</p>
+    <p><b>Distance:</b> {{ form.value.distance }}</p>
+    <p><b>Gender:</b> {{ form.value.gender }}</p>
+    <p><b>Working:</b> {{ form.value.working ? 'Yes' : 'No' }}</p>
+
+    <button (click)="closePopup()" class="cancel">Cancel</button>
+    <button (click)="confirmSubmit()" class="ok">OK</button>
+
+  </div>
+</div>
+</body>

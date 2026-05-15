@@ -1,0 +1,204 @@
+<!-- app.component.html -->
+
+<div class="page">
+
+  <div class="top-section">
+
+    <label class="partner-label">
+      Partner API
+    </label>
+
+    <div class="dropdown-wrapper">
+
+      <select [(ngModel)]="selectedPartner">
+
+        <option value="">
+          Select
+        </option>
+
+        <option value="standardPartner">
+          Standard Partner
+        </option>
+
+      </select>
+
+    </div>
+
+  </div>
+
+  <!-- Hierarchy -->
+
+  <div
+    class="hierarchy-wrapper"
+    *ngIf="selectedPartner === 'standardPartner'"
+  >
+
+    <!-- Billing -->
+
+    <div class="flow">
+
+      <div
+        class="card"
+        (click)="openPopup('billing')"
+      >
+
+        <div class="icon billing">
+          🏢
+        </div>
+
+        <div class="text">
+
+          <div class="name">
+            Name
+          </div>
+
+          <div class="type">
+            Billing Entity
+          </div>
+
+        </div>
+
+      </div>
+
+      <div class="line"></div>
+
+    </div>
+
+    <!-- Merchant -->
+
+    <div class="flow">
+
+      <div
+        class="card"
+        (click)="openPopup('merchant')"
+      >
+
+        <div class="icon merchant">
+          💳
+        </div>
+
+        <div class="text">
+
+          <div class="name">
+            Name
+          </div>
+
+          <div class="type">
+            Merchant
+          </div>
+
+        </div>
+
+      </div>
+
+      <div class="line"></div>
+
+    </div>
+
+    <!-- Branding -->
+
+    <div class="flow">
+
+      <div
+        class="card"
+        (click)="openPopup('branding')"
+      >
+
+        <div class="icon branding">
+          🎨
+        </div>
+
+        <div class="text">
+
+          <div class="name">
+            Name
+          </div>
+
+          <div class="type">
+            Branding
+          </div>
+
+        </div>
+
+      </div>
+
+      <div class="line"></div>
+
+    </div>
+
+    <!-- Shop -->
+
+    <div
+      class="card"
+      (click)="openPopup('shop')"
+    >
+
+      <div class="icon shop">
+        🛍️
+      </div>
+
+      <div class="text">
+
+        <div class="name">
+          Name
+        </div>
+
+        <div class="type">
+          Shop
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</div>
+
+<!-- Popup -->
+
+<div
+  class="overlay"
+  *ngIf="selectedPopup"
+>
+
+  <div class="popup">
+
+    <button
+      class="close-btn"
+      (click)="closePopup()"
+    >
+      ×
+    </button>
+
+    <h2>
+      {{ selectedPopup | titlecase }} Form
+    </h2>
+
+    <div class="form-grid">
+
+      <input
+        type="text"
+        placeholder="Enter Name"
+      />
+
+      <input
+        type="text"
+        placeholder="Enter ID"
+      />
+
+      <input
+        type="text"
+        placeholder="Description"
+      />
+
+      <input
+        type="text"
+        placeholder="Status"
+      />
+
+    </div>
+
+  </div>
+
+</div>

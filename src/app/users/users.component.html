@@ -1,0 +1,285 @@
+<body>
+  <div class="page-wrapper">
+    <div class="header-bar">
+      <div class="header-left">
+        <div class="header-icon">👥</div>
+        <div>
+          <h2 class="title">User Management</h2>
+          <p class="subtitle">Manage and track all registered users</p>
+        </div>
+      </div>
+    </div>
+    <button (click)="logout()">Logout</button>
+    <button class="reset-btn1" (click)="exportCSV()">
+      <span class="material-icons">file_download</span> Export
+    </button>
+    
+    <div class="stats-row">
+      <div class="stat-card total">
+        <div class="stat-icon">👤</div>
+        <div class="stat-info">
+          <span class="stat-num">{{ sc.students.length }}</span>
+          <span class="stat-label">Total Users</span>
+        </div>
+        <div class="stat-trend">📋</div>
+      </div>
+      <div class="stat-card working">
+        <div class="stat-icon">✅</div>
+        <div class="stat-info">
+          <span class="stat-num">{{ sc.students | workingCount:true }}</span>
+          <span class="stat-label">Working</span>
+        </div>
+        <div class="stat-trend">📈</div>
+      </div>
+      <div class="stat-card not-working">
+        <div class="stat-icon">❌</div>
+        <div class="stat-info">
+          <span class="stat-num">{{ sc.students | workingCount:false }}</span>
+          <span class="stat-label">Not Working</span>
+        </div>
+        <div class="stat-trend">📉</div>
+      </div>
+      <div class="stat-card male-card">
+        <div class="stat-icon">🧔</div>
+        <div class="stat-info">
+          <span class="stat-num">{{ sc.students | genderCount:'male' }}</span>
+          <span class="stat-label">Male</span>
+        </div>
+        <div class="stat-trend">♂️</div>
+      </div>
+      <div class="stat-card female-card">
+        <div class="stat-icon">👩</div>
+        <div class="stat-info">
+          <span class="stat-num">{{ sc.students | genderCount:'female' }}</span>
+          <span class="stat-label">Female</span>
+        </div>
+        <div class="stat-trend">♀️</div>
+      </div>
+    </div>
+    <div class="filter-bar">
+      <div class="search-wrap">
+        <span class="search-icon">🔍</span>
+        <input type="text" class="se" placeholder="Search by name or city…" [(ngModel)]="searchText"
+          (input)="currentPage = 1">
+      </div>
+
+      <div class="filter-group">
+        <select class="filter-select" [(ngModel)]="filterGender" (change)="currentPage=1">
+          <option value="">All Genders</option>
+          <option value="male">Male</option>
+          <option value="female">Female</option>
+        </select>
+
+        <select class="filter-select" [(ngModel)]="filterStatus" (change)="currentPage=1">
+          <option value="">All Status</option>
+          <option value="true">Working</option>
+          <option value="false">Not Working</option>
+        </select>
+
+        <select class="filter-select" [(ngModel)]="itemsPerPage" (change)="currentPage=1">
+          <!-- <option [value]="1">1 / page</option> -->
+          <option [value]="5">5 / page</option>
+          <option [value]="10">10 / page</option>
+          <option [value]="25">25 / page</option>
+          <option [value]="50">50 / page</option>
+        </select>
+        <select class="filter-select" [(ngModel)]="filterDistance" (change)="currentPage=1">
+          <option value="">All Distance</option>
+          <option value="near">Near</option>
+          <option value="far">Far</option>
+        </select>
+        <select [(ngModel)]="selectedLocale" class="filter-select">
+          <option value="en-IN">India</option>
+          <option value="en-US">USA</option>
+          <option value="fr-FR">France</option>
+          <option value="de-DE">Germany</option>
+        </select>
+      </div>
+
+      <button class="reset-btn" (click)="resetFilters()" title="Reset all filters">
+        🔄 Reset
+      </button>
+      <button class="reset-btn" (click)="refreshData()" title="Refresh">
+        🔄 Refresh
+      </button>
+      <button class="reset-btn" (click)="confirmBulkDelete()">🗑 Delete Selected</button>
+    </div>
+    <div class="result-row">
+      <div class="result-info">
+        <span class="result-badge">
+          Showing {{ paginatedItems.length }} of {{ filteredStudents.length }} users
+          <ng-container *ngIf="filteredStudents.length !== sc.students.length">
+            (filtered from {{ sc.students.length }})
+          </ng-container>
+        </span>
+      </div>
+      <button class="add-btn" (click)="add1()">
+        ➕ Add
+      </button>
+    </div>
+    <div *ngIf="loading; else dataBlock" class="loader-wrap">
+      <div class="loader"></div>
+      <p class="loader-text">Loading users…</p>
+    </div>
+    <ng-template #dataBlock>
+      <div class="table-container">
+        <table class="table">
+          <thead>
+            <tr>
+              <th>
+                <input type="checkbox" (change)="selectAll($event)">
+              </th>
+              <th class="col-num">#</th>
+
+              <th (click)="sortBy('name')" [class.sort-active]="sortCol==='name'">
+                <span class="th-content">
+                  Name
+                  <span class="sort-arrow">{{ getSortIcon('name') }}</span>
+                </span>
+              </th>
+
+              <th (click)="sortBy('dob')" [class.sort-active]="sortCol==='dob'">
+                <span class="th-content">
+                  DOB
+                  <span class="sort-arrow">{{ getSortIcon('dob') }}</span>
+                </span>
+              </th>
+
+              <th (click)="sortBy('city')" [class.sort-active]="sortCol==='city'">
+                <span class="th-content">
+                  City
+                  <span class="sort-arrow">{{ getSortIcon('city') }}</span>
+                </span>
+              </th>
+
+              <th (click)="sortBy('distance')" [class.sort-active]="sortCol==='distance'">
+                <span class="th-content">
+                  Distance
+                  <span class="sort-arrow">{{ getSortIcon('distance') }}</span>
+                </span>
+              </th>
+              <th><span class="th-content">Gender</span></th>
+              <th><span class="th-content">Status</span></th>
+              <th class="col-actions">Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let u of paginatedItems; let i = index" class="data-row">
+              <td><input type="checkbox" [(ngModel)]="u.selected" class="switch"></td>
+              <td><span class="row-num">{{ getActualIndex(i) + 1 }}</span></td>
+              <td (click)="viewUser(u)" class="clickable"><span class="user-name">{{ u.name }}</span></td>
+              <td><span class="dob-text">{{ u.dob | date:'mediumDate':undefined:selectedLocale}}</span></td>
+              <td><span class="city-tag">📍 {{ u.city }}</span></td>
+              <td><span class="distance-val">
+                  {{ u.distance | km | number:'1.0-2':selectedLocale }} km
+                </span></td>
+              <td><span class="gender-badge" [ngClass]="u.gender?.toLowerCase()">{{ u.gender }}</span></td>
+              <td><span class="status" [ngClass]="u.working ? 'active' : 'inactive'">
+                  <span class="status-dot"></span>
+                  {{ u.working ? 'Active' : 'Inactive' }}
+                </span>
+              </td>
+              <td>
+                <div class="action-group">
+                  <label class="switch" title="Toggle Status">
+                    <input type="checkbox" [checked]="u.working" (change)="toggleStatus(u)">
+                    <span class="slider"></span>
+                  </label>
+                  <button class="icon-btn edit" (click)="edit(u)" title="Edit">
+                    <span class="material-icons">edit</span>
+                  </button>
+                  <button class="icon-btn delete" (click)="delete(u)" title="Delete">
+                    <span class="material-icons">delete</span>
+                  </button>
+                </div>
+              </td>
+            </tr>
+            <tr *ngIf="paginatedItems.length === 0">
+              <td colspan="8" class="empty-state">
+                <div class="empty-inner">
+                  <div class="empty-icon">🔍</div>
+                  <p class="empty-title">No users found</p>
+                  <p class="empty-subtitle">
+                    Try changing your search, filters, or add a new user
+                  </p>
+                  <div class="empty-actions">
+                    <button class="reset-btn" (click)="resetFilters()">Clear Filters</button>
+                    <button class="add-btn" (click)="add1()">➕ Add User</button>
+                  </div>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="pagination-bar">
+        <div class="pagination-info">
+          Page <strong>{{ currentPage }}</strong> of <strong>{{ totalPages }}</strong>
+        </div>
+        <div class="goto-page">
+          <label class="goto-label">Go to</label>
+
+          <input type="number" [(ngModel)]="gotoPageNumber" (keyup.enter)="goToInputPage()" min="1" [max]="totalPages"
+            placeholder=" " />
+
+          <button class="go-btn" (click)="goToInputPage()">Go</button>
+        </div>
+        <div class="pagination-controls">
+          <button class="pg-btn" (click)="goToPage(1)" [disabled]="currentPage === 1" title="First page">««</button>
+          <button class="pg-btn" (click)="prevPage()" [disabled]="currentPage === 1" title="Previous">‹</button>
+          <ng-container *ngFor="let p of pageNumbers">
+            <span *ngIf="p === '...'" class="pg-ellipsis">…</span>
+            <button *ngIf="p !== '...'" class="pg-btn pg-num" [class.pg-active]="p === currentPage"
+              (click)="goToPage(+p)">
+              {{ p }}
+            </button>
+          </ng-container>
+          <button class="pg-btn" (click)="nextPage()" [disabled]="currentPage === totalPages" title="Next">›</button>
+          <button class="pg-btn" (click)="goToPage(totalPages)" [disabled]="currentPage === totalPages"
+            title="Last page">»»</button>
+        </div>
+      </div>
+      <div class="undo-bar" *ngIf="showUndo">
+        <span>User deleted</span>
+        <button (click)="undoDelete()">UNDO</button>
+      </div>
+      <div class="activity-section">
+        <h3>🕒 Recent Activity</h3>
+        <div *ngIf="sc.logs.length === 0" class="no-logs">
+          No recent actions
+        </div>
+        <ul *ngIf="sc.logs.length > 0" class="log-list">
+          <li *ngFor="let log of sc.logs">
+            {{ log }}
+          </li>
+        </ul>
+      </div>
+    </ng-template>
+    <div class="popup-backdrop" *ngIf="showPopup">
+      <div class="popup-box">
+        <div class="popup-icon">
+          {{ actionType === 'delete' ? '⚠️ WARNING ⚠️' : actionType === 'edit' ? '✏️ EDIT ✏️' : '➕ ADD ➕' }}
+        </div>
+        <h3 class="popup-title">
+          {{ actionType === 'delete' ? 'Delete User' : actionType === 'edit' ? 'Edit User' : 'Add User' }}
+        </h3>
+        <p class="popup-message">{{ popupMessage }}</p>
+        <div class="popup-actions">
+          <button class="btn cancel" (click)="onCancel()">Cancel</button>
+          <button class="btn ok" (click)="onConfirm()">OK</button>
+        </div>
+      </div>
+    </div>
+    <div class="popup-backdrop" *ngIf="showUserPopup">
+      <div class="popup-box">
+        <h3>User Details</h3>
+        <p><strong>Name:</strong> {{ selectedUser?.name }}</p>
+        <p><strong>City:</strong> {{ selectedUser?.city }}</p>
+        <p><strong>DOB:</strong> {{ selectedUser?.dob | date }}</p>
+        <p><strong>Distance:</strong> {{ selectedUser?.distance | km }}</p>
+        <p><strong>Status:</strong> {{ selectedUser?.working ? 'Working' : 'Not Working' }}</p>
+        <button class="btn cancel" (click)="closeUserPopup()">Close</button>
+      </div>
+    </div>
+  </div>
+</body>

@@ -1,0 +1,25 @@
+<body>
+
+<div class="form-container">
+  <h2>Login</h2>
+
+  <form [formGroup]="form" (ngSubmit)="submit()">
+
+    <div class="input-group">
+      <input type="email" formControlName="email" placeholder=" ">
+      <label>Email</label>
+    </div>
+
+    <div class="input-group">
+      <input [type]="showPass ? 'text' : 'password'" formControlName="pass" placeholder=" ">
+      <label>Password</label>
+      <span class="eye" (click)="showPass = !showPass">👁</span>
+    </div>
+
+    <button type="submit">Login</button>
+
+  </form>
+
+  <p>Don't have an account? <a routerLink="/register">Register</a></p>
+</div>
+</body>

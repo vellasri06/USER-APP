@@ -1,0 +1,240 @@
+/* BACKGROUND */
+body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background: #f1f5f9;
+    font-family: 'Segoe UI', sans-serif;
+}
+
+/* FORM CONTAINER (MODAL STYLE) */
+.form-container {
+    width: 380px;
+    background: #ffffff;
+    padding: 20px 22px;
+    border-radius: 8px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+    border: 1px solid #e5e7eb;
+}
+
+/* LABEL */
+label {
+    font-size: 12px;
+    font-weight: 600;
+    color: #374151;
+    margin-bottom: 4px;
+    display: block;
+}
+
+/* INPUT FIELDS */
+input[type="text"],
+input[type="number"],
+input[type="date"] {
+    width: 70%;
+    padding: 8px 10px;
+    margin-bottom: 10px;
+    border-radius: 6px;
+    border: 1px solid #d1d5db;
+    font-size: 13px;
+    background: #f9fafb;
+    outline: none;
+    transition: 0.2s;
+}
+
+/* INPUT FOCUS */
+input:focus {
+    border-color: #2563eb;
+    background: #ffffff;
+    box-shadow: 0 0 0 2px rgba(37,99,235,0.15);
+}
+
+/* RADIO GROUP */
+.radio-group {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 10px;
+}
+
+.radio-group label {
+    flex: 1;
+    text-align: center;
+    padding: 6px;
+    border-radius: 6px;
+    border: 1px solid #d1d5db;
+    background: #f9fafb;
+    font-size: 12px;
+    cursor: pointer;
+}
+
+.radio-group input {
+    display: none;
+}
+
+.radio-group input:checked + span {
+    background: #2563eb;
+    color: white;
+    padding: 4px 8px;
+    border-radius: 4px;
+}
+
+/* ERROR */
+.error {
+    font-size: 11px;
+    color: #dc2626;
+    margin-bottom: 6px;
+}
+
+/* BUTTON BASE */
+button {
+    font-size: 13px;
+    padding: 8px 0;
+    border-radius: 6px;
+    border: none;
+    cursor: pointer;
+}
+
+/* SIDE BY SIDE BUTTONS */
+button:first-of-type,
+button[type="submit"] {
+    width: 48%;
+}
+
+/* CANCEL BUTTON */
+button:first-of-type {
+    background: #e5e7eb;
+    color: #374151;
+}
+
+button:first-of-type:hover {
+    background: #d1d5db;
+}
+
+/* SUBMIT BUTTON (LIKE IMAGE GREEN) */
+button[type="submit"] {
+    background: #22c55e;
+    color: white;
+}
+
+button[type="submit"]:hover {
+    background: #16a34a;
+}
+
+/* DISABLED */
+button[type="submit"]:disabled {
+    background: #bbf7d0;
+    cursor: not-allowed;
+}
+
+/* ALIGN BUTTONS */
+form button {
+    display: inline-block;
+}
+
+form button:first-of-type {
+    margin-right: 4%;
+}/* Overlay with blur effect */
+.popup-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(15, 23, 42, 0.6);
+  backdrop-filter: blur(6px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+/* Card */
+.popup-card {
+  background: #ffffff;
+  padding: 25px;
+  border-radius: 16px;
+  width: 320px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.25);
+  animation: popupFade 0.25s ease-in-out;
+}
+
+/* Title */
+.popup-card h3 {
+  text-align: center;
+  margin-bottom: 15px;
+  color: #1e293b;
+  font-size: 18px;
+  font-weight: 600;
+}
+
+/* Data preview */
+.preview p {
+  margin: 6px 0;
+  font-size: 14px;
+  color: #334155;
+}
+
+/* Buttons container */
+.popup-buttons {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+/* Cancel button */
+.cancel {
+  flex: 1;
+  background: #f1f5f9;
+  color: #334155;
+  border: none;
+  border-radius: 10px;
+  padding: 10px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.cancel:hover {
+  background: #e2e8f0;
+  transform: translateY(-1px);
+}
+
+/* OK button */
+.ok {
+  flex: 1;
+  background: linear-gradient(135deg, #6366f1, #4f46e5);
+  color: white;
+  border: none;
+  border-radius: 10px;
+  padding: 10px;
+  width:90px;
+  font-weight: 600;
+  cursor: pointer;
+  margin-left: 50px;
+  transition: all 0.2s ease;
+}
+
+.ok:hover {
+  background: linear-gradient(135deg, #4f46e5, #4338ca);
+  transform: translateY(-1px);
+  box-shadow: 0 5px 12px rgba(79, 70, 229, 0.4);
+}
+
+/* Click effect */
+.ok:active,
+.cancel:active {
+  transform: scale(0.97);
+}
+
+/* Animation */
+@keyframes popupFade {
+  from {
+    opacity: 0;
+    transform: scale(0.9) translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}

@@ -1,0 +1,50 @@
+
+<body>
+<div class="form-container">
+  <h2>Register</h2>
+
+  <form [formGroup]="form" (ngSubmit)="submit()">
+
+    <div class="input-group">
+      <input type="text" formControlName="name" placeholder=" ">
+      <label>Name</label>
+      <div class="error" *ngIf="form.controls.name.touched && form.controls.name.invalid">
+        Name must be at least 3 characters
+      </div>
+    </div>
+
+    <div class="input-group">
+      <input type="email" formControlName="email" placeholder=" ">
+      <label>Email</label>
+      <div class="error" *ngIf="form.controls.email.touched && form.controls.email.invalid">
+        Enter valid email
+      </div>
+    </div>
+
+    <div class="input-group">
+      <input [type]="showPass ? 'text' : 'password'" formControlName="pass" placeholder=" ">
+      <label>Password</label>
+      <span class="eye" (click)="showPass = !showPass">👁</span>
+      <div class="error" *ngIf="form.controls.pass.touched && form.controls.pass.invalid">
+        Password must be at least 4 characters
+      </div>
+    </div>
+
+    <div class="input-group">
+      <input [type]="showConf ? 'text' : 'password'" formControlName="conf" placeholder=" ">
+      <label>Confirm Password</label>
+      <span class="eye" (click)="showConf = !showConf">👁</span>
+      <div class="error" *ngIf="form.controls.conf.touched && form.controls.conf.invalid">
+        Confirm password is required
+      </div>
+    </div>
+
+    <button type="submit" [disabled]="form.invalid">
+      Register
+    </button>
+
+  </form>
+
+  <p>Already have an account? <a routerLink="/login">Login</a></p>
+</div>
+</body>
